@@ -3,27 +3,33 @@ package com.akanksha.securepayai.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "customer")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long customerID;
+    private Long customerId;
 
     @NotNull(message = "Customer Name is required")
-    public String customerName;
+    private String customerName;
 
     @NotNull(message = "Email is required")
     @Email(message = "Invalid Email")
-    public String email;
+    private String email;
 
     @NotNull
-    public String password;
+    private String password;
 
-    public String phoneNumber;
-    public String dateOfBirth;
-    public String address;
-
+    private String phoneNumber;
+    private LocalDate dateOfBirth;
+    private String address;
 
 }
