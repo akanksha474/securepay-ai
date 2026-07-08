@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice // controllerAdvice + responseBody
-// we can send a JSON format , not a simple text
+// we can send a JSON format, not a simple text
 public class GlobalExceptionHandler {
     @ExceptionHandler(exception = CustomerAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleException(CustomerAlreadyExistsException ex){
@@ -30,6 +30,15 @@ public class GlobalExceptionHandler {
         error.setMessage(ex.getFieldErrors().get(0).getDefaultMessage());
         error.setTimeStamp(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerNotFoundException(Exception ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
 }

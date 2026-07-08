@@ -9,8 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerResponse {
+public class CustomerLoginResponse {
+
     private Long customerId;
     private String customerName;
     private String email;
+
 }

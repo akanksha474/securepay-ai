@@ -1,7 +1,9 @@
 package com.akanksha.securepayai.controller;
 
+import com.akanksha.securepayai.dto.CustomerLoginRequest;
+import com.akanksha.securepayai.dto.CustomerLoginResponse;
 import com.akanksha.securepayai.dto.CustomerRegistrationRequest;
-import com.akanksha.securepayai.dto.CustomerResponse;
+import com.akanksha.securepayai.dto.CustomerRegistrationResponse;
 import com.akanksha.securepayai.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +22,18 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/register")
-    public ResponseEntity<CustomerResponse> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request){
+    public ResponseEntity<CustomerRegistrationResponse> registerCustomer(@Valid @RequestBody CustomerRegistrationRequest request){
 
-        CustomerResponse response = customerService.registerCustomer(request);
+        CustomerRegistrationResponse response = customerService.registerCustomer(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<CustomerLoginResponse> loginCustomer(@Valid @RequestBody CustomerLoginRequest request){
+
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.loginCustomer(request));
+
     }
 
 }

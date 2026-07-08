@@ -1,8 +1,11 @@
 package com.akanksha.securepayai.service;
 
+import com.akanksha.securepayai.dto.CustomerLoginRequest;
+import com.akanksha.securepayai.dto.CustomerLoginResponse;
 import com.akanksha.securepayai.dto.CustomerRegistrationRequest;
-import com.akanksha.securepayai.dto.CustomerResponse;
+import com.akanksha.securepayai.dto.CustomerRegistrationResponse;
 import com.akanksha.securepayai.exception.CustomerAlreadyExistsException;
+import com.akanksha.securepayai.exception.CustomerNotFoundException;
 import com.akanksha.securepayai.model.Customer;
 import com.akanksha.securepayai.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class CustomerService{
 
     private final CustomerRepository customerRepository;
-    public CustomerResponse registerCustomer(CustomerRegistrationRequest request){
+    public CustomerRegistrationResponse registerCustomer(CustomerRegistrationRequest request){
       if(customerRepository.existsByEmail(request.getEmail())){
           throw new CustomerAlreadyExistsException("Customer already exists");
       }
@@ -22,7 +25,7 @@ public class CustomerService{
       Customer customer = mapToCustomer(request);
       Customer savedCustomer = customerRepository.save(customer);
 
-      CustomerResponse response = new CustomerResponse();
+      CustomerRegistrationResponse response = new CustomerRegistrationResponse();
       response.setCustomerId(savedCustomer.getCustomerId());
       response.setCustomerName(savedCustomer.getCustomerName());
       response.setEmail(savedCustomer.getEmail());
@@ -40,4 +43,19 @@ public class CustomerService{
         customer.setDateOfBirth(request.getDateOfBirth());
         return customer;
     }
+
+    public CustomerLoginResponse loginCustomer(CustomerLoginRequest request){
+        Customer customer = customerRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomerNotFoundException("Invalid Email or Password"));
+        CustomerLoginResponse response = new CustomerLoginResponse();
+        response.setCustomerId(customer.getCustomerId());
+        response.setCustomerName(customer.getCustomerName());
+        response.setEmail(customer.getEmail());
+
+        if(!customer.getPassword().equals(request.getPassword())){
+            throw new CustomerNotFoundException("Invalid Email or Password");
+        }
+        return response;
+    }
+
+
 }
