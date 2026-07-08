@@ -1,0 +1,35 @@
+package com.akanksha.securepayai.exception;
+
+import com.akanksha.securepayai.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+
+@RestControllerAdvice // controllerAdvice + responseBody
+// we can send a JSON format , not a simple text
+public class GlobalExceptionHandler {
+    @ExceptionHandler(exception = CustomerAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleException(CustomerAlreadyExistsException ex){
+
+        ErrorResponse error = new ErrorResponse();
+        error.setStatus(HttpStatus.CONFLICT.value());
+        error.setMessage(ex.getMessage());
+        error.setTimeStamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        ErrorResponse error = new ErrorResponse();
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(ex.getFieldErrors().get(0).getDefaultMessage());
+        error.setTimeStamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+}

@@ -2,6 +2,7 @@ package com.akanksha.securepayai.service;
 
 import com.akanksha.securepayai.dto.CustomerRegistrationRequest;
 import com.akanksha.securepayai.dto.CustomerResponse;
+import com.akanksha.securepayai.exception.CustomerAlreadyExistsException;
 import com.akanksha.securepayai.model.Customer;
 import com.akanksha.securepayai.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor // tells springboot to create the constructor for the customer repo
 //modern way to create it, else @autowired will work for same.
-public class CustomerService {
+public class CustomerService{
 
     private final CustomerRepository customerRepository;
     public CustomerResponse registerCustomer(CustomerRegistrationRequest request){
       if(customerRepository.existsByEmail(request.getEmail())){
-          throw new RuntimeException("Customer already exists");
+          throw new CustomerAlreadyExistsException("Customer already exists");
       }
 
       Customer customer = mapToCustomer(request);

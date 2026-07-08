@@ -18,11 +18,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @NotNull(message = "Customer Name is required")
     private String customerName;
 
-    @NotNull(message = "Email is required")
-    @Email(message = "Invalid Email")
     private String email;
 
     @NotNull
