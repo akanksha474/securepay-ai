@@ -1,6 +1,5 @@
 package com.akanksha.securepayai.dto;
 
-import com.akanksha.securepayai.enums.AccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,13 +14,11 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountRequest {
-    @NotNull
-    private Long customerId;
-    @NotNull
-    private AccountType accountType;
-    @NotNull
-    @Positive
-    private BigDecimal balance;
+public class DepositRequest {
+    @NotBlank(message = "Account Number is required")
+    private String accountNumber;
 
+    @NotNull
+    @Positive(message = "Amount must be positive")
+    private BigDecimal amount;
 }

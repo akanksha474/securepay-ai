@@ -2,12 +2,13 @@ package com.akanksha.securepayai.controller;
 
 import com.akanksha.securepayai.dto.AccountRequest;
 import com.akanksha.securepayai.dto.AccountResponse;
-import com.akanksha.securepayai.model.Account;
+import com.akanksha.securepayai.dto.DepositRequest;
+import com.akanksha.securepayai.dto.DepositResponse;
 import com.akanksha.securepayai.service.AccountService;
+import com.akanksha.securepayai.service.DepositService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
+    private final DepositService depositService;
 
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request){
@@ -26,5 +28,10 @@ public class AccountController {
         AccountResponse response = accountService.createAccount(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
+    }
+    @PostMapping("/deposit")
+    public ResponseEntity<DepositResponse> deposit(@Valid @RequestBody DepositRequest request){
+        DepositResponse response = depositService.depositMoney(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
