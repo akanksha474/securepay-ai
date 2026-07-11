@@ -1,4 +1,4 @@
-package com.akanksha.securepayai.dto;
+package com.akanksha.securepayai.dto.account;
 
 import com.akanksha.securepayai.enums.AccountType;
 import jakarta.validation.constraints.NotNull;

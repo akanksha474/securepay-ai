@@ -1,4 +1,4 @@
-package com.akanksha.securepayai.dto;
+package com.akanksha.securepayai.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

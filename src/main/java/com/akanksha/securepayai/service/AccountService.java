@@ -1,7 +1,7 @@
 package com.akanksha.securepayai.service;
 
-import com.akanksha.securepayai.dto.AccountRequest;
-import com.akanksha.securepayai.dto.AccountResponse;
+import com.akanksha.securepayai.dto.account.AccountRequest;
+import com.akanksha.securepayai.dto.account.AccountResponse;
 import com.akanksha.securepayai.exception.AccountAlreadyExistsException;
 import com.akanksha.securepayai.exception.CustomerNotFoundException;
 import com.akanksha.securepayai.exception.MinimumBalanceException;

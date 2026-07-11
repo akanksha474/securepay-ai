@@ -1,9 +1,9 @@
 package com.akanksha.securepayai.controller;
 
-import com.akanksha.securepayai.dto.CustomerLoginRequest;
-import com.akanksha.securepayai.dto.CustomerLoginResponse;
-import com.akanksha.securepayai.dto.CustomerRegistrationRequest;
-import com.akanksha.securepayai.dto.CustomerRegistrationResponse;
+import com.akanksha.securepayai.dto.customer.CustomerLoginRequest;
+import com.akanksha.securepayai.dto.customer.CustomerLoginResponse;
+import com.akanksha.securepayai.dto.customer.CustomerRegistrationRequest;
+import com.akanksha.securepayai.dto.customer.CustomerRegistrationResponse;
 import com.akanksha.securepayai.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

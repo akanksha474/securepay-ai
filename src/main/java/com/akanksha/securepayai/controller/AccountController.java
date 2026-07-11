@@ -1,9 +1,9 @@
 package com.akanksha.securepayai.controller;
 
-import com.akanksha.securepayai.dto.AccountRequest;
-import com.akanksha.securepayai.dto.AccountResponse;
-import com.akanksha.securepayai.dto.DepositRequest;
-import com.akanksha.securepayai.dto.DepositResponse;
+import com.akanksha.securepayai.dto.account.AccountRequest;
+import com.akanksha.securepayai.dto.account.AccountResponse;
+import com.akanksha.securepayai.dto.account.DepositRequest;
+import com.akanksha.securepayai.dto.account.DepositResponse;
 import com.akanksha.securepayai.service.AccountService;
 import com.akanksha.securepayai.service.DepositService;
 import jakarta.validation.Valid;

@@ -1,7 +1,7 @@
 package com.akanksha.securepayai.service;
 
-import com.akanksha.securepayai.dto.DepositRequest;
-import com.akanksha.securepayai.dto.DepositResponse;
+import com.akanksha.securepayai.dto.account.DepositRequest;
+import com.akanksha.securepayai.dto.account.DepositResponse;
 import com.akanksha.securepayai.exception.AccountNotFoundException;
 import com.akanksha.securepayai.exception.InvalidDepositAmountException;
 import com.akanksha.securepayai.model.Account;
