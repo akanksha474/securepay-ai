@@ -80,6 +80,14 @@ public class GlobalExceptionHandler {
         errorResponse.setTimeStamp(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTransactionNotFound(Exception ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 
 
 

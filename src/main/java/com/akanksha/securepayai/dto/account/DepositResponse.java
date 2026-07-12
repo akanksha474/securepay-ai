@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,6 +19,7 @@ public class DepositResponse {
     private BigDecimal previousBalance;
     private BigDecimal depositAmount;
     private BigDecimal newBalance;
+    private LocalDate transactionDate;
     private LocalDateTime transactionTime;
     private String message;
 

@@ -2,15 +2,19 @@ package com.akanksha.securepayai.service;
 
 import com.akanksha.securepayai.dto.account.DepositRequest;
 import com.akanksha.securepayai.dto.account.DepositResponse;
+import com.akanksha.securepayai.enums.TransactionType;
 import com.akanksha.securepayai.exception.AccountNotFoundException;
 import com.akanksha.securepayai.exception.InvalidDepositAmountException;
 import com.akanksha.securepayai.model.Account;
+import com.akanksha.securepayai.model.Transaction;
 import com.akanksha.securepayai.repository.AccountRepository;
+import com.akanksha.securepayai.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class DepositService {
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
     public DepositResponse depositMoney(DepositRequest request){
         Account account = accountRepository.findByAccountNumber(request.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found"));
@@ -31,9 +36,23 @@ public class DepositService {
         // no need to use save - accountRepository.save(account); becoz @transactional will do dirty checking and update the database
         response.setNewBalance(account.getBalance());
         response.setDepositAmount(request.getAmount());
+        response.setTransactionDate(LocalDate.now());
         response.setTransactionTime(LocalDateTime.now());
         response.setMessage("Deposit successful");
+        saveTransaction(request);
         return response;
     }
+
+    public void saveTransaction( DepositRequest deposit){
+        Transaction transaction = new Transaction();
+        transaction.setTransactionDate(LocalDate.now());
+        transaction.setTransactionTime(LocalDateTime.now());
+        transaction.setAccount(accountRepository.findByAccountNumber(deposit.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found")));
+        transaction.setTransactionType(TransactionType.valueOf("Deposit"));
+        transaction.setAmount(deposit.getAmount());
+        transaction.setTransactionStatus("SUCCESSFUL");
+        transactionRepository.save(transaction);
+    }
+
 
 }

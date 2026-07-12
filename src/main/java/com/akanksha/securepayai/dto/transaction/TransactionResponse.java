@@ -1,5 +1,6 @@
-package com.akanksha.securepayai.dto.account;
+package com.akanksha.securepayai.dto.transaction;
 
+import com.akanksha.securepayai.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +13,12 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WithdrawResponse {
-
-    private String accountNumber;
-    private BigDecimal previousBalance;
-    private BigDecimal withdrawalAmount;
-    private BigDecimal remainingBalance;
+public class TransactionResponse {
+    private Long transactionId;
+    private TransactionType transactionType;
+    private BigDecimal amount;
+    private String transactionStatus;
     private LocalDate transactionDate;
     private LocalDateTime transactionTime;
-    private String message;
 
 }
