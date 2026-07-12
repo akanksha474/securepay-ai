@@ -1,11 +1,9 @@
 package com.akanksha.securepayai.controller;
 
-import com.akanksha.securepayai.dto.account.AccountRequest;
-import com.akanksha.securepayai.dto.account.AccountResponse;
-import com.akanksha.securepayai.dto.account.DepositRequest;
-import com.akanksha.securepayai.dto.account.DepositResponse;
+import com.akanksha.securepayai.dto.account.*;
 import com.akanksha.securepayai.service.AccountService;
 import com.akanksha.securepayai.service.DepositService;
+import com.akanksha.securepayai.service.WithdrawService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
     private final AccountService accountService;
     private final DepositService depositService;
+    private final WithdrawService withdrawService;
 
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request){
@@ -30,8 +29,13 @@ public class AccountController {
 
     }
     @PostMapping("/deposit")
-    public ResponseEntity<DepositResponse> deposit(@Valid @RequestBody DepositRequest request){
+    public ResponseEntity<DepositResponse> depositMoney(@Valid @RequestBody DepositRequest request){
         DepositResponse response = depositService.depositMoney(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @PostMapping("/withdraw")
+    public ResponseEntity<WithdrawResponse> withdrawMoney(@Valid @RequestBody WithdrawRequest request ){
+        WithdrawResponse response = withdrawService.withdrawMoney(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
