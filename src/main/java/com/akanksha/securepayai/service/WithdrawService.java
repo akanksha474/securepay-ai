@@ -1,6 +1,5 @@
 package com.akanksha.securepayai.service;
 
-import com.akanksha.securepayai.dto.account.DepositRequest;
 import com.akanksha.securepayai.dto.account.WithdrawRequest;
 import com.akanksha.securepayai.dto.account.WithdrawResponse;
 import com.akanksha.securepayai.enums.TransactionType;
