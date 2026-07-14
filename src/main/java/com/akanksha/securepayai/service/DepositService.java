@@ -2,6 +2,7 @@ package com.akanksha.securepayai.service;
 
 import com.akanksha.securepayai.dto.account.DepositRequest;
 import com.akanksha.securepayai.dto.account.DepositResponse;
+import com.akanksha.securepayai.enums.TransactionDirection;
 import com.akanksha.securepayai.enums.TransactionType;
 import com.akanksha.securepayai.exception.AccountNotFoundException;
 import com.akanksha.securepayai.exception.InvalidDepositAmountException;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 public class DepositService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionHistoryService transactionHistoryService;
 
     public DepositResponse depositMoney(DepositRequest request){
         Account account = accountRepository.findByAccountNumber(request.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found"));
@@ -39,20 +41,8 @@ public class DepositService {
         response.setTransactionDate(LocalDate.now());
         response.setTransactionTime(LocalDateTime.now());
         response.setMessage("Deposit successful");
-        saveTransaction(request);
+        transactionHistoryService.saveTransaction(account,request.getAmount(),TransactionType.Deposit, TransactionDirection.Credit);
         return response;
     }
-
-    public void saveTransaction( DepositRequest deposit){
-        Transaction transaction = new Transaction();
-        transaction.setTransactionDate(LocalDate.now());
-        transaction.setTransactionTime(LocalDateTime.now());
-        transaction.setAccount(accountRepository.findByAccountNumber(deposit.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found")));
-        transaction.setTransactionType(TransactionType.valueOf("Deposit"));
-        transaction.setAmount(deposit.getAmount());
-        transaction.setTransactionStatus("SUCCESSFUL");
-        transactionRepository.save(transaction);
-    }
-
 
 }

@@ -2,6 +2,7 @@ package com.akanksha.securepayai.service;
 
 import com.akanksha.securepayai.dto.account.WithdrawRequest;
 import com.akanksha.securepayai.dto.account.WithdrawResponse;
+import com.akanksha.securepayai.enums.TransactionDirection;
 import com.akanksha.securepayai.enums.TransactionType;
 import com.akanksha.securepayai.exception.AccountNotFoundException;
 import com.akanksha.securepayai.exception.InsufficientBalanceException;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 public class WithdrawService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionHistoryService transactionHistoryService;
 
     public WithdrawResponse withdrawMoney(WithdrawRequest request){
         Account account = accountRepository.findByAccountNumber(request.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found"));
@@ -39,19 +41,10 @@ public class WithdrawService {
         response.setTransactionDate(LocalDate.now());
         response.setTransactionTime(LocalDateTime.now());
         response.setMessage("Withdrawal successful");
-        saveTransaction(request);
+        transactionHistoryService.saveTransaction(account,request.getAmount(),TransactionType.Withdrawal, TransactionDirection.Debit);
         return response;
     }
-    public void saveTransaction( WithdrawRequest withdraw){
-        Transaction transaction = new Transaction();
-        transaction.setTransactionDate(LocalDate.now());
-        transaction.setTransactionTime(LocalDateTime.now());
-        transaction.setAccount(accountRepository.findByAccountNumber(withdraw.getAccountNumber()).orElseThrow(() -> new AccountNotFoundException("Account not found")));
-        transaction.setTransactionType(TransactionType.valueOf("Withdrawal"));
-        transaction.setAmount(withdraw.getAmount());
-        transaction.setTransactionStatus("SUCCESSFUL");
-        transactionRepository.save(transaction);
-    }
+
 
 
 }

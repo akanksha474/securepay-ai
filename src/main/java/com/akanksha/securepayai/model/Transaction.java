@@ -1,5 +1,6 @@
 package com.akanksha.securepayai.model;
 
+import com.akanksha.securepayai.enums.TransactionDirection;
 import com.akanksha.securepayai.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,8 @@ public class Transaction {
     private Long transactionId;
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionDirection  transactionDirection;
     private String transactionStatus;
     @ManyToOne
     @JoinColumn(name = "account_account_id")

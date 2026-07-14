@@ -1,5 +1,6 @@
 package com.akanksha.securepayai.dto.transaction;
 
+import com.akanksha.securepayai.enums.TransactionDirection;
 import com.akanksha.securepayai.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class TransactionResponse {
     private Long transactionId;
     private TransactionType transactionType;
+    private TransactionDirection transactionDirection;
     private BigDecimal amount;
     private String transactionStatus;
     private LocalDate transactionDate;
