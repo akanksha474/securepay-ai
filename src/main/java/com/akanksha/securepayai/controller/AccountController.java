@@ -1,17 +1,14 @@
 package com.akanksha.securepayai.controller;
 
 import com.akanksha.securepayai.dto.account.*;
-import com.akanksha.securepayai.service.AccountService;
-import com.akanksha.securepayai.service.DepositService;
-import com.akanksha.securepayai.service.WithdrawService;
+import com.akanksha.securepayai.dto.transfer.TransferRequest;
+import com.akanksha.securepayai.dto.transfer.TransferResponse;
+import com.akanksha.securepayai.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -20,6 +17,8 @@ public class AccountController {
     private final AccountService accountService;
     private final DepositService depositService;
     private final WithdrawService withdrawService;
+    private final BalanceService balanceService;
+    private final TransferService transferService;
 
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request){
@@ -38,4 +37,15 @@ public class AccountController {
         WithdrawResponse response = withdrawService.withdrawMoney(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    @GetMapping("/{accountNumber}/balance")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable String accountNumber){
+        BalanceResponse response = balanceService.getBalance(accountNumber);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @PostMapping("/transfer")
+    public ResponseEntity<TransferResponse> transferMoney(@Valid @RequestBody TransferRequest request){
+        TransferResponse response = transferService.transferMoney(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
