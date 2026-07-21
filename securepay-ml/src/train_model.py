@@ -46,8 +46,11 @@ print("F1 Score :", f1_score(y_test, predictions))
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, predictions))
 
-# saving the model
+# saving the model and scaler
 joblib.dump(model, "../models/fraud_model.pkl")
+joblib.dump(scaler, "../models/scaler.pkl")
 
 print("\nModel trained successfully!")
 print("Model saved as fraud_model.pkl")
+print("Scaler saved as scaler.pkl")
+
