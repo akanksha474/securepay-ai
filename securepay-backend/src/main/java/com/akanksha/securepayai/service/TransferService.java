@@ -1,5 +1,7 @@
 package com.akanksha.securepayai.service;
 
+import com.akanksha.securepayai.dto.ml.PredictionRequest;
+import com.akanksha.securepayai.dto.ml.PredictionResponse;
 import com.akanksha.securepayai.dto.transfer.TransferRequest;
 import com.akanksha.securepayai.dto.transfer.TransferResponse;
 import com.akanksha.securepayai.enums.RiskLevel;
@@ -29,6 +31,8 @@ public class TransferService {
     private final AccountRepository accountRepository;
     private final TransactionHistoryService transactionHistoryService;
     private final FraudDetectionService fraudDetectionService;
+    private final PredictionService predictionService;
+    private final MlFeaturesService mlFeaturesService;
 
 
 
@@ -48,13 +52,35 @@ public class TransferService {
         // fraud detection
         FraudContext fraudContext = FraudContext.builder().account(senderAccount).amount(transferRequest.getAmount()).transactionTime(LocalDateTime.now()).build();
         FraudResult fraudResult = fraudDetectionService.calculateRisk(fraudContext);
-        // tested the logics
+        // testing the logics
          System.out.println("Risk score: " + fraudResult.getRiskScore());
         System.out.println("Risk Level:"+ fraudResult.getRiskLevel());
 
         if(fraudResult.getRiskLevel() == RiskLevel.HIGH){
             throw new FraudDetectionException("High Risk : transaction blocked, Needs to verify the Transaction!");
         }
+
+        //ml prediction
+        PredictionRequest mlRequest = new PredictionRequest();
+        mlRequest.setAmount(transferRequest.getAmount().doubleValue());
+        mlRequest.setHour(LocalDateTime.now().getHour());
+        mlRequest.setVelocity(mlFeaturesService.extractVelocity(senderAccount));
+        mlRequest.setAccountAge(mlFeaturesService.extractAccountAge(senderAccount));
+
+        PredictionResponse mlResponse = predictionService.predict(mlRequest);
+
+        //testing the logic
+        System.out.println("ML Fraud Prediction : " + mlResponse.getFraud());
+        System.out.println("ML Probability : " + mlResponse.getProbability());
+
+        if (fraudResult.getRiskLevel() == RiskLevel.HIGH ||
+                (Boolean.TRUE.equals(mlResponse.getFraud())
+                        && mlResponse.getProbability() >= 0.80)) {
+
+            throw new FraudDetectionException(
+                    "Transaction blocked due to fraud detection.");
+        }
+
 
         senderAccount.setBalance(senderAccount.getBalance().subtract(transferRequest.getAmount()));
         receiverAccount.setBalance(receiverAccount.getBalance().add(transferRequest.getAmount()));
